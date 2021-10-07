@@ -1,0 +1,36 @@
+{
+  "name": "another-todo-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon -L src/index.js",
+    "test": "jest --watchAll"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "keywords": [],
+  "author": "David Arias <davidarias.contact@gmail.com> (https://luisdavidarias.com)",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "mongodb": "^4.1.0",
+    "mongoose": "^6.0.0",
+    "mongoose-data-seed": "^2.1.6",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "faker": "^5.5.3",
+    "jest": "^27.0.6",
+    "migrate-mongo": "^8.2.3",
+    "nodemon": "^2.0.12"
+  },
+  "mdSeed": {
+    "seedersFolder": "./seeders"
+  }
+}
