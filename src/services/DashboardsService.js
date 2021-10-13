@@ -1,6 +1,7 @@
 // Models
 const DashboardModel = require("../models/Dashboard");
 const TaskGroupModel = require("../models/TaskGroup");
+const { relocateTaskGroup } = require("../utils/task_groups");
 
 class _DashboardsService {
   async getDashboards() {
@@ -95,8 +96,38 @@ class _DashboardsService {
     return taskGroup;
   }
 
-  async moveTaskGroup() {
-    //TODO: Order the other documents
+  async moveTaskGroup(dashboardId, taskGroupId, nextPosition) {
+    // Find the affected groups
+    const affectedTaskGroups = await TaskGroupModel.find({
+      dashboard: dashboardId,
+    }).select(["_id", "position"]);
+
+    console.log(affectedTaskGroups);
+
+    const updatedTaskGroups = relocateTaskGroup(
+      taskGroupId,
+      nextPosition,
+      affectedTaskGroups
+    );
+
+    // Optimize database calls selecting only the real affected task groups
+    const taskGroupsToWrite = updatedTaskGroups.filter(
+      (taskGroup) => taskGroup.currentPosition !== taskGroup.nextPosition
+    );
+
+    // Update the filtered task groups
+    const updateResults = await Promise.all(
+      taskGroupsToWrite.map(async (taskGroup) => 
+        TaskGroupModel.findByIdAndUpdate(
+          taskGroup._id,
+          {
+            $set: { position: taskGroup.nextPosition },
+          },
+          { new: true }
+        ).select(["_id", "position"])
+    ))
+
+    return updateResults;
   }
 }
 

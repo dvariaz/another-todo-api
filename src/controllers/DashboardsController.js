@@ -100,4 +100,28 @@ router.post("/:id/task-groups", async (req, res) => {
   }
 });
 
+router.patch(
+  "/:dashboardId/task-groups/:taskGroupId/move",
+  async (req, res) => {
+    const { dashboardId, taskGroupId } = req.params;
+    const { position } = req.body;
+
+    try {
+      const updatedTaskGroupsPosition = await DashboardsService.moveTaskGroup(
+        dashboardId,
+        taskGroupId,
+        position
+      );
+
+      res.status(200).json({ task_groups: updatedTaskGroupsPosition });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: `Error trying to move task group ${taskGroupId} on dashboard ${dashboardId}.`,
+        details: err.message,
+      });
+    }
+  }
+);
+
 module.exports = router;

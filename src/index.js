@@ -4,8 +4,10 @@ const express = require("express");
 
 const { name, version } = require("../package.json");
 
-//Controllers
-const DatabaseController = require("./controllers/DatabaseController");
+// Config
+const Database = require("./config/db");
+
+// Controllers
 const UsersController = require("./controllers/UsersController");
 const DashboardsController = require("./controllers/DashboardsController");
 const TasksController = require("./controllers/TasksController");
@@ -33,7 +35,7 @@ app.get("/", (req, res) => {
 });
 
 function main() {
-  DatabaseController.initDb()
+  Database.initDb()
     .then((db) => {
       app.listen(process.env.PORT, () => {
         console.log(`Running on env: ${process.env.ENVIRONMENT}`);
@@ -46,7 +48,7 @@ function main() {
     });
 }
 
-process.on("SIGINT", DatabaseController.closeDb);
-process.on("SIGTERM", DatabaseController.closeDb);
+process.on("SIGINT", Database.closeDb);
+process.on("SIGTERM", Database.closeDb);
 
 main();
