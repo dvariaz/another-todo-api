@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   try {
     const tasks = await TasksService.getTasks();
 
-    res.status(200).json({ tasks });
+    res.status(200).json(tasks);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
   try {
     const task = await TasksService.getTaskById(id);
 
-    res.status(200).json({ task });
+    res.status(200).json(task);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
   try {
     const task = await TasksService.createTask(payload);
 
-    res.status(200).json({ task });
+    res.status(200).json(task);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -58,7 +58,7 @@ router.put("/:id", async (req, res) => {
   try {
     const task = await TasksService.updateTaskById(id, payload);
 
-    res.status(200).json({ task });
+    res.status(200).json(task);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -74,7 +74,7 @@ router.patch("/move", async (req, res) => {
   try {
     const result = await TasksService.moveTask(task, origin, destination);
 
-    res.status(200).json({ ...result });
+    res.status(200).json(result);
   } catch (err) {
     console.error(err);
     res.status(500).json({

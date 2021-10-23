@@ -1,6 +1,7 @@
 require("dotenv").config();
 const morgan = require("morgan");
 const express = require("express");
+const cors = require('cors')
 
 const { name, version } = require("../package.json");
 
@@ -22,6 +23,7 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("combined"));
+app.use(cors())
 
 app.use("/users", UsersController);
 app.use("/dashboards", DashboardsController);

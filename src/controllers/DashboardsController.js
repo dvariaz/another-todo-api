@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   try {
     const dashboards = await DashboardsService.getDashboards();
 
-    res.status(200).json({ dashboards });
+    res.status(200).json(dashboards);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
   try {
     const dashboard = await DashboardsService.createDashboard(payload);
 
-    res.status(200).json({ dashboard });
+    res.status(200).json(dashboard);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -41,7 +41,7 @@ router.get("/:id", async (req, res) => {
   try {
     const dashboard = await DashboardsService.getDashboardById(id);
 
-    res.status(200).json({ dashboard });
+    res.status(200).json(dashboard);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -58,7 +58,7 @@ router.put("/:id", async (req, res) => {
   try {
     const dashboard = await DashboardsService.updateDashboardById(id, payload);
 
-    res.status(200).json({ dashboard });
+    res.status(200).json(dashboard);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -90,7 +90,7 @@ router.post("/:id/task-groups", async (req, res) => {
   try {
     const taskGroup = await DashboardsService.createTaskGroup(id, payload);
 
-    res.status(200).json({ task_group: taskGroup });
+    res.status(200).json(taskGroup);
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -113,7 +113,7 @@ router.patch(
         position
       );
 
-      res.status(200).json({ task_groups: updatedTaskGroupsPosition });
+      res.status(200).json(updatedTaskGroupsPosition);
     } catch (err) {
       console.error(err);
       res.status(500).json({

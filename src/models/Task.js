@@ -11,4 +11,6 @@ const TaskSchema = new Schema(
   { timestamps: true }
 );
 
+//TODO: Añadir fecha de finalización de la tarea
+
 module.exports = model("Task", TaskSchema);
