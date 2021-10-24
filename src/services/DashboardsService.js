@@ -4,8 +4,10 @@ const TaskGroupModel = require("../models/TaskGroup");
 const { relocateTaskGroup } = require("../utils/task_groups");
 
 class _DashboardsService {
-  async getDashboards() {
-    const dashboards = await DashboardModel.find().populate([
+  async getDashboards({ owner }) {
+    const query = owner ? { owner } : {};
+
+    const dashboards = await DashboardModel.find(query).populate([
       {
         path: "shared_users",
         select: ["name", "email", "role", "profile_photo"],
@@ -50,9 +52,15 @@ class _DashboardsService {
 
     const taskGroups = await TaskGroupModel.find({ dashboard: id })
       .sort("position")
-      .populate({
-        path: "tasks",
-      })
+      .populate([
+        {
+          path: "tasks",
+          populate: {
+            path: "created_by",
+            select: ["name", "profile_photo"],
+          },
+        },
+      ])
       .lean();
 
     return { ...dashboard, task_groups: taskGroups };
@@ -117,7 +125,7 @@ class _DashboardsService {
 
     // Update the filtered task groups
     const updateResults = await Promise.all(
-      taskGroupsToWrite.map(async (taskGroup) => 
+      taskGroupsToWrite.map(async (taskGroup) =>
         TaskGroupModel.findByIdAndUpdate(
           taskGroup._id,
           {
@@ -125,7 +133,8 @@ class _DashboardsService {
           },
           { new: true }
         ).select(["_id", "position"])
-    ))
+      )
+    );
 
     return updateResults;
   }

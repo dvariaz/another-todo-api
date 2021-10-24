@@ -6,8 +6,10 @@ const DashboardsService = require("../services/DashboardsService");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+  const {owner} = req.query;
+
   try {
-    const dashboards = await DashboardsService.getDashboards();
+    const dashboards = await DashboardsService.getDashboards({owner});
 
     res.status(200).json(dashboards);
   } catch (err) {

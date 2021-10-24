@@ -30,12 +30,12 @@ class TasksSeeder extends Seeder {
     const taskGroups = [];
 
     // Dashboard iterator
-    for (let dashboardCount = 0; dashboardCount < 5; dashboardCount++) {
+    for (let dashboardCount = 0; dashboardCount < 10; dashboardCount++) {
       const [randomDashboard] = pickRandomElements(currentDashboards, 1);
       const dashboardId = new ObjectId(randomDashboard._id);
 
       const dashboardTasks = [];
-      const tasksLimit = getRandomNumber(1, 10); // Tasks count per dashboard
+      const tasksLimit = getRandomNumber(1, 15); // Tasks count per dashboard
 
       for (let taskCount = 0; taskCount < tasksLimit; taskCount++) {
         // We extract a random number of users from the dashboard
@@ -77,7 +77,7 @@ class TasksSeeder extends Seeder {
       const taskGroupLimit = groups.length; // The number of chunks is the number of groups
 
       for (let taskGroup = 0; taskGroup < taskGroupLimit; taskGroup++) {
-        const name = faker.lorem.sentences(getRandomNumber(1, 3));
+        const name = faker.lorem.words(getRandomNumber(1, 2));
         const tasks = groups[taskGroup];
 
         taskGroups.push({
