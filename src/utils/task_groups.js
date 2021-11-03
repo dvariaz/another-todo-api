@@ -22,7 +22,7 @@ const relocateTaskGroup = (taskGroupId, taskGroupNextPosition, taskGroups) => {
       currentPosition: taskGroup.position,
     };
 
-    // Split de task groups in target task group and the rest of task groups
+    // Split the task groups in target task group and the rest of task groups
     if (taskGroup._id.equals(taskGroupId)) {
       taskGroupData.nextPosition = taskGroupNextPosition;
 

@@ -1,22 +1,25 @@
 // Models
 const DashboardModel = require("../models/Dashboard");
 const TaskGroupModel = require("../models/TaskGroup");
+
+// Utils
 const { relocateTaskGroup } = require("../utils/task_groups");
 
 class _DashboardsService {
   async getDashboards({ owner }) {
     const query = owner ? { owner } : {};
 
-    const dashboards = await DashboardModel.find(query).populate([
-      {
-        path: "shared_users",
-        select: ["name", "email", "role", "profile_photo"],
-      },
-      {
-        path: "owner",
-        select: ["name", "email", "role", "profile_photo"],
-      },
-    ]);
+    const dashboards = await DashboardModel.find(query)
+    // .populate([
+    //   {
+    //     path: "shared_users",
+    //     select: ["name", "email", "role", "profile_photo"],
+    //   },
+    //   {
+    //     path: "owner",
+    //     select: ["name", "email", "role", "profile_photo"],
+    //   },
+    // ]);
 
     return dashboards;
   }
@@ -38,29 +41,29 @@ class _DashboardsService {
 
   async getDashboardById(id) {
     const dashboard = await DashboardModel.findById(id)
-      .populate([
-        {
-          path: "shared_users",
-          select: ["name", "email", "role", "profile_photo"],
-        },
-        {
-          path: "owner",
-          select: ["name", "email", "role", "profile_photo"],
-        },
-      ])
+      // .populate([
+      //   {
+      //     path: "shared_users",
+      //     select: ["name", "email", "role", "profile_photo"],
+      //   },
+      //   {
+      //     path: "owner",
+      //     select: ["name", "email", "role", "profile_photo"],
+      //   },
+      // ])
       .lean();
 
-    const taskGroups = await TaskGroupModel.find({ dashboard: id })
+    const taskGroups = await TaskGroupModel.find({ dashboard: id }).select(['id','position'])
       .sort("position")
-      .populate([
-        {
-          path: "tasks",
-          populate: {
-            path: "created_by",
-            select: ["name", "profile_photo"],
-          },
-        },
-      ])
+      // .populate([
+      //   {
+      //     path: "tasks",
+      //     populate: {
+      //       path: "created_by",
+      //       select: ["name", "profile_photo"],
+      //     },
+      //   },
+      // ])
       .lean();
 
     return { ...dashboard, task_groups: taskGroups };

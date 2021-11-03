@@ -11,6 +11,7 @@ const Database = require("./config/db");
 // Controllers
 const UsersController = require("./controllers/UsersController");
 const DashboardsController = require("./controllers/DashboardsController");
+const TaskGroupsController = require("./controllers/TaskGroupsController");
 const TasksController = require("./controllers/TasksController");
 
 // Models
@@ -27,6 +28,7 @@ app.use(cors())
 
 app.use("/users", UsersController);
 app.use("/dashboards", DashboardsController);
+app.use("/task-groups", TaskGroupsController);
 app.use("/tasks", TasksController);
 
 app.get("/", (req, res) => {
