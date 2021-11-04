@@ -28,8 +28,7 @@
     "dotenv": "^10.0.0",
     "faker": "^5.5.3",
     "jest": "^27.0.6",
-    "migrate-mongo": "^8.2.3",
-    "nodemon": "^2.0.12"
+    "migrate-mongo": "^8.2.3"
   },
   "mdSeed": {
     "seedersFolder": "./seeders"

@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { folderExists } = require("../src/utils/fs");
 const { Seeder } = require("mongoose-data-seed");
 const faker = require("faker/locale/es_MX");
 const bcrypt = require("bcrypt");
@@ -40,6 +41,9 @@ class UsersSeeder extends Seeder {
       });
     }
 
+    if (!folderExists(path.resolve(__dirname, "output"))) {
+      await fs.mkdir("output");
+    }
     const passwordsFilePath = path.resolve("output/passwords.json");
     await fs.writeFile(
       passwordsFilePath,
