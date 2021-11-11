@@ -1,6 +1,9 @@
 // Models
 const TaskGroupModel = require("../models/TaskGroup");
 
+// Services
+const TasksService = require("./TasksService");
+
 class _TaskGroupsService {
   async getTaskGroups(){
     const taskGroups = await TaskGroupModel.find({})
@@ -27,6 +30,16 @@ class _TaskGroupsService {
     });
 
     return createdTask;
+  }
+
+  async deleteTaskInTaskGroup(taskGroupId, taskId) {
+    const updatedTaskGroup = await TaskGroupModel.findByIdAndUpdate(taskGroupId, {
+      $pull: {
+        tasks: taskId
+      }
+    },{ new: true })
+
+    return updatedTaskGroup;
   }
 }
 

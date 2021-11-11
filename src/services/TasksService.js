@@ -12,29 +12,11 @@ class _TasksService {
   async createTask(payload) {
     const task = await TaskModel.create(payload);
 
-    return task.populate([
-      {
-        path: "shared_users",
-        select: ["name", "email", "role", "profile_photo"],
-      },
-      {
-        path: "created_by",
-        select: ["name", "email", "role", "profile_photo"],
-      },
-    ]);
+    return task;
   }
 
   async getTaskById(id) {
-    const task = await TaskModel.findById(id).populate([
-      {
-        path: "shared_users",
-        select: ["name", "email", "role", "profile_photo"],
-      },
-      {
-        path: "created_by",
-        select: ["name", "email", "role", "profile_photo"],
-      },
-    ]);
+    const task = await TaskModel.findById(id)
 
     return task;
   }
@@ -46,18 +28,7 @@ class _TasksService {
         $set: payload,
       },
       { new: true }
-    )
-      .populate([
-        {
-          path: "shared_users",
-          select: ["name", "email", "role", "profile_photo"],
-        },
-        {
-          path: "created_by",
-          select: ["name", "email", "role", "profile_photo"],
-        },
-      ])
-      .lean();
+    ).lean();
 
     return updatedTask;
   }

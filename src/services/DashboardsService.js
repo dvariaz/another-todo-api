@@ -53,20 +53,11 @@ class _DashboardsService {
       // ])
       .lean();
 
-    const taskGroups = await TaskGroupModel.find({ dashboard: id }).select(['id','position'])
+    const taskGroups = await TaskGroupModel.find({ dashboard: id }).select(['id', 'tasks'])
       .sort("position")
-      // .populate([
-      //   {
-      //     path: "tasks",
-      //     populate: {
-      //       path: "created_by",
-      //       select: ["name", "profile_photo"],
-      //     },
-      //   },
-      // ])
-      .lean();
+      .lean()
 
-    return { ...dashboard, task_groups: taskGroups };
+    return { ...dashboard, task_groups: taskGroups};
   }
 
   async updateDashboardById(id, payload) {
@@ -77,16 +68,16 @@ class _DashboardsService {
       },
       { new: true }
     )
-      .populate([
-        {
-          path: "shared_users",
-          select: ["name", "email", "role", "profile_photo"],
-        },
-        {
-          path: "owner",
-          select: ["name", "email", "role", "profile_photo"],
-        },
-      ])
+      // .populate([
+      //   {
+      //     path: "shared_users",
+      //     select: ["name", "email", "role", "profile_photo"],
+      //   },
+      //   {
+      //     path: "owner",
+      //     select: ["name", "email", "role", "profile_photo"],
+      //   },
+      // ])
       .lean();
 
     return updatedDashboard;
