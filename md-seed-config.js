@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const mongoURL = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}?authSource=admin&appname=Todo%20API&ssl=false`;
+const mongoURL = process.env.MONGO_URL;
 
 // Seeders
 const Users = require("./seeders/users.seeder");

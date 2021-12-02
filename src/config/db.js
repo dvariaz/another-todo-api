@@ -8,10 +8,10 @@ db.once("open", function () {
 });
 
 async function initDb() {
-  return mongoose.connect(
-    `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}/${process.env.MONGO_DB_NAME}?authSource=admin&appname=Todo%20API&ssl=false`,
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  );
+  return mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 }
 
 async function closeDb() {
