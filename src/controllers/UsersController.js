@@ -1,13 +1,23 @@
 const express = require("express");
+const passport = require("passport");
+
+// Constants
+const UserRoles = require("../consts/roles");
+
+// Middlewares
+const { authorize } = require("../middlewares/auth");
 
 // Services
-const UsersService = require("../services/UsersService");
+const UserService = require("../services/UserService");
 
 const router = express.Router();
 
+router.use(passport.authenticate("jwt", { session: false }));
+router.use(authorize([UserRoles.USER_ROLE]));
+
 router.get("/", async (req, res) => {
   try {
-    const users = await UsersService.getUsers();
+    const users = await UserService.getUsers();
 
     res.status(200).json(users);
   } catch (err) {
@@ -22,7 +32,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await UsersService.getUserById(id);
+    const user = await UserService.getUserById(id);
 
     res.status(200).json(user);
   } catch (err) {
@@ -38,7 +48,7 @@ router.put("/:id", async (req, res) => {
   const payload = req.body;
 
   try {
-    const oldUser = await UsersService.updateUser(id, payload);
+    const oldUser = await UserService.updateUser(id, payload);
 
     res.status(200).json(oldUser);
   } catch (err) {
