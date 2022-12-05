@@ -2,23 +2,23 @@
 const TaskGroupModel = require("../models/TaskGroup");
 
 // Services
-const TasksService = require("./TasksService");
+const TaskService = require("./TaskService");
 
-class _TaskGroupsService {
-  async getTaskGroups(){
-    const taskGroups = await TaskGroupModel.find({})
+class _TaskGroupService {
+  async getTaskGroups() {
+    const taskGroups = await TaskGroupModel.find({});
 
     return taskGroups;
   }
 
-  async getTaskGroupById(taskGroupId){
+  async getTaskGroupById(taskGroupId) {
     const taskGroup = await TaskGroupModel.findById(taskGroupId);
 
     return taskGroup;
   }
 
   async createTaskInTaskGroup(taskGroupId, task, position) {
-    const createdTask = await TasksService.createTask(task);
+    const createdTask = await TaskService.createTask(task);
 
     await TaskGroupModel.findByIdAndUpdate(taskGroupId, {
       $push: {
@@ -33,14 +33,18 @@ class _TaskGroupsService {
   }
 
   async deleteTaskInTaskGroup(taskGroupId, taskId) {
-    const updatedTaskGroup = await TaskGroupModel.findByIdAndUpdate(taskGroupId, {
-      $pull: {
-        tasks: taskId
-      }
-    },{ new: true })
+    const updatedTaskGroup = await TaskGroupModel.findByIdAndUpdate(
+      taskGroupId,
+      {
+        $pull: {
+          tasks: taskId,
+        },
+      },
+      { new: true }
+    );
 
     return updatedTaskGroup;
   }
 }
 
-module.exports = new _TaskGroupsService();
+module.exports = new _TaskGroupService();

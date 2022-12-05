@@ -2,7 +2,7 @@
 const TaskModel = require("../models/Task");
 const TaskGroupModel = require("../models/TaskGroup");
 
-class _TasksService {
+class _TaskService {
   async getTasks() {
     const tasks = await TaskModel.find();
 
@@ -16,7 +16,7 @@ class _TasksService {
   }
 
   async getTaskById(id) {
-    const task = await TaskModel.findById(id)
+    const task = await TaskModel.findById(id);
 
     return task;
   }
@@ -65,4 +65,4 @@ class _TasksService {
   }
 }
 
-module.exports = new _TasksService();
+module.exports = new _TaskService();
