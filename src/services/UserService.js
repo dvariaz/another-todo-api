@@ -1,7 +1,7 @@
 // Models
 const UserModel = require("../models/User");
 
-class _UsersService {
+class _UserService {
   async getUsers() {
     const users = await UserModel.find({});
 
@@ -10,6 +10,18 @@ class _UsersService {
 
   async getUserById(id) {
     const user = await UserModel.findById(id);
+
+    return user;
+  }
+
+  async getUserByEmail(email) {
+    const user = await UserModel.findOne({ email });
+
+    return user;
+  }
+
+  async createUser(payload) {
+    const user = await UserModel.create(payload);
 
     return user;
   }
@@ -27,4 +39,4 @@ class _UsersService {
   }
 }
 
-module.exports = new _UsersService();
+module.exports = new _UserService();
