@@ -1,13 +1,23 @@
 const express = require("express");
+const passport = require("passport");
+
+// Constants
+const UserRoles = require("../consts/roles");
+
+// Middlewares
+const { authorize } = require("../middlewares/auth");
 
 // Services
-const TasksService = require("../services/TasksService");
+const TaskService = require("../services/TaskService");
 
 const router = express.Router();
 
+router.use(passport.authenticate("jwt", { session: false }));
+router.use(authorize([UserRoles.USER_ROLE]));
+
 router.get("/", async (req, res) => {
   try {
-    const tasks = await TasksService.getTasks();
+    const tasks = await TaskService.getTasks();
 
     res.status(200).json(tasks);
   } catch (err) {
@@ -23,7 +33,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const task = await TasksService.getTaskById(id);
+    const task = await TaskService.getTaskById(id);
 
     res.status(200).json(task);
   } catch (err) {
@@ -39,7 +49,7 @@ router.post("/", async (req, res) => {
   const payload = req.body;
 
   try {
-    const task = await TasksService.createTask(payload);
+    const task = await TaskService.createTask(payload);
 
     res.status(200).json(task);
   } catch (err) {
@@ -56,7 +66,7 @@ router.put("/:id", async (req, res) => {
   const payload = req.body;
 
   try {
-    const task = await TasksService.updateTaskById(id, payload);
+    const task = await TaskService.updateTaskById(id, payload);
 
     res.status(200).json(task);
   } catch (err) {
@@ -72,7 +82,7 @@ router.patch("/move", async (req, res) => {
   const { task, origin, destination } = req.body;
 
   try {
-    const result = await TasksService.moveTask(task, origin, destination);
+    const result = await TaskService.moveTask(task, origin, destination);
 
     res.status(200).json(result);
   } catch (err) {

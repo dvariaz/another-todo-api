@@ -6,10 +6,17 @@ const TaskGroupModel = require("../models/TaskGroup");
 const { relocateTaskGroup } = require("../utils/task_groups");
 
 class _DashboardsService {
-  async getDashboards({ owner }) {
-    const query = owner ? { owner } : {};
+  async getDashboards({ involvedUser }) {
+    const query = involvedUser
+      ? {
+          $or: [
+            { owner: involvedUser },
+            { shared_users: { $in: [involvedUser] } },
+          ],
+        }
+      : {};
 
-    const dashboards = await DashboardModel.find(query)
+    const dashboards = await DashboardModel.find(query);
     // .populate([
     //   {
     //     path: "shared_users",
@@ -53,11 +60,12 @@ class _DashboardsService {
       // ])
       .lean();
 
-    const taskGroups = await TaskGroupModel.find({ dashboard: id }).select(['id', 'tasks'])
+    const taskGroups = await TaskGroupModel.find({ dashboard: id })
+      .select(["id", "tasks"])
       .sort("position")
-      .lean()
+      .lean();
 
-    return { ...dashboard, task_groups: taskGroups};
+    return { ...dashboard, task_groups: taskGroups };
   }
 
   async updateDashboardById(id, payload) {

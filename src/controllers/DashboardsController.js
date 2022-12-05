@@ -1,15 +1,24 @@
 const express = require("express");
+const passport = require("passport");
+
+// Constants
+const UserRoles = require("../consts/roles");
+
+// Middlewares
+const { authorize } = require("../middlewares/auth");
 
 // Services
 const DashboardsService = require("../services/DashboardsService");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const { owner } = req.query;
+router.use(passport.authenticate("jwt", { session: false }));
+router.use(authorize([UserRoles.USER_ROLE]));
 
+router.get("/", async (req, res) => {
   try {
-    const dashboards = await DashboardsService.getDashboards({ owner });
+    const involvedUser = req.user._id;
+    const dashboards = await DashboardsService.getDashboards({ involvedUser });
 
     res.status(200).json(dashboards);
   } catch (err) {
@@ -22,9 +31,10 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const payload = req.body;
-
   try {
+    const owner = req.user._id;
+    const payload = { ...req.body, owner };
+
     const dashboard = await DashboardsService.createDashboard(payload);
 
     res.status(200).json(dashboard);
@@ -125,7 +135,5 @@ router.patch(
     }
   }
 );
-
-
 
 module.exports = router;
